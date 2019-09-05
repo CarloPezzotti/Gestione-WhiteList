@@ -1,7 +1,7 @@
-#### Date
+#### <b>Date</b>
 
-### Lavoro svolto
+### <b>Lavoro svolto</b>
 
-### Errori riscontrati
+### <b>Errori riscontrati</b>
 
-### Lavor prossima lezione
+### <b>Lavor prossima lezione</b>
