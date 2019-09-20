@@ -8,8 +8,7 @@ create TABLE type(
 );
 
 create TABLE user(
-    id int AUTO_INCREMENT PRIMARY KEY,
-    username varchar(255),
+    username varchar(255) PRIMARY KEY,
     name varchar(50),
     surname varchar(50),
     email varchar(50),
@@ -18,3 +17,6 @@ create TABLE user(
     setpassword TINYINT,
     FOREIGN KEY (type) REFERENCES type(id)
 );
+
+insert into type values(0,"admin");
+insert into type values(0,"user");

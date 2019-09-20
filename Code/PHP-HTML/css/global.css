@@ -1,0 +1,42 @@
+body{
+    font-family: sans-serif;
+    text-align: center;
+}
+.container{           
+    width: 100%;
+
+}
+.container.login{    
+    height: 500px;
+}
+
+.loginC{
+    margin: auto;
+    width: 500px;
+    height: 50px;
+}
+
+.loginC input{
+    float: right;
+}
+.loginC select{
+    float: right;
+}
+.loginC span{
+    float: left;
+}
+.tableR {
+    margin:auto;
+    width: 700px;
+    background-color: black;
+}
+.tableR thead th {
+    margin:auto;
+    color: white;
+    
+}
+
+.tableR tbody td {
+    background-color: white;
+    border: 1px solid black;
+}
