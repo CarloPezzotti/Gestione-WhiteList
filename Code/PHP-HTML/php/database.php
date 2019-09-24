@@ -13,14 +13,13 @@
         public static function getConnection(){
             if(!empty(self::$connection)){
                 return self::$connection;
-            }else{
-                
+            }else{           
                 $dsn = "mysql:port=".self::$port.";host=".self::$host.";dbname=".self::$database;
                 try {
                     self::$connection = new PDO($dsn, self::$username, self::$password);
                     return self::$connection;
-                } catch (\PDOException $e) {
-                    echo $e;
+                } catch (PDOException $e) {
+                    throw $e;
                 }
             }
         }
