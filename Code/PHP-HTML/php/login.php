@@ -1,27 +1,22 @@
 <?php
-$setPassword = 0;
-$name;
-$surname;
-$username;
-require_once "database.php";
-require_once "changePassword.php";
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    if ($_POST["setpassword"] == 1) { 
+    require_once "database.php";
+    require_once "changePassword.php";
+    if ($_POST["setpassword"] == 1) {
 
         if (!empty($_POST["password"]) && !empty($_POST["repassword"]) && !empty($_POST["username"])) {
-            if($_POST["password"] == $_POST["repassword"]){
-                if(!ChangePassword::change($_POST["username"],$_POST["password"])){
+            if ($_POST["password"] == $_POST["repassword"]) {
+                if (!ChangePassword::change($_POST["username"], $_POST["password"])) {
                     $error = "Error changing password";
-                }   
-            }else{
+                } else {
+
+                    $success = "Password changed, login again";
+                }
+            } else {
                 $error = "Password don't match :(";
             }
         }
-        
     } else {
-
         if (empty($_POST["username"])) {
             $error = "Username required!<br>";
         }
@@ -32,35 +27,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $conn = null;
 
             try {
-                $conn = Database::getConnection();
-                $stmt = $conn->prepare("SELECT name,surname,type,setpassword  FROM user WHERE username = ? AND password = ?");
-                $stmt->execute([$_POST["username"], $_POST["password"]]);
-                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+                $query = "SELECT name,surname,type,setpassword,password  FROM user WHERE username = :username";
+                $values = array(
+                    "username" => $_POST["username"]
+                );
+                $result = Database::executeQuery($query, $values);
                 ##No account find
                 if (count($result) == 0) {
                     $error = "Username not found!";
                 } else {
-                    if ($result[0]["setpassword"] == 1) {
-                        $setPassword = 1;
-                        $name = $result[0]["name"];
-                        $surname = $result[0]["surname"];
-                        $username = $_POST["username"];
-                    } else {
-                        session_start();
-                        $_SESSION["name"] = $result[0]["name"];
-                        $_SESSION["surname"] = $result[0]["surname"];
-                        $_SESSION["type"] = $result[0]["type"];
-                        if ($result[0]["type"] == 1) {
-                            header("Location: admin.php");
-                        } else if ($result[0]["type"] == 2) {
-                            header("Location: whitelist.php");
+                    if (password_verify($_POST["password"], $result[0]["password"])) {
+                        if ($result[0]["setpassword"] == 1) {
+                            $setPassword = 1;
+                            $name = $result[0]["name"];
+                            $surname = $result[0]["surname"];
+                            $username = $_POST["username"];
                         } else {
-                            header("Refresh:0");
+                            session_start();
+                            $_SESSION["name"] = $result[0]["name"];
+                            $_SESSION["surname"] = $result[0]["surname"];
+                            $_SESSION["type"] = $result[0]["type"];
+                            if ($result[0]["type"] == 1) {
+                                header("Location: admin.php");
+                            } else if ($result[0]["type"] == 2) {
+                                header("Location: whitelist.php");
+                            } else {
+                                header("Refresh:0");
+                            }
                         }
+                    }else{
+                        $error = "Password wrong :(";
                     }
                 }
             } catch (\Throwable $th) {
+                echo $th;
                 echo "Error :(";
                 exit;
             }
@@ -88,7 +88,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <form action="login.php" method="post">
                 <div class="loginC">
                     <span>Username:</span>
-                    <input type="text" name="username" placeholder="Username...">
+                    <input value="<?php if ($_POST["setpassword"] == 1) {
+                                        echo $_POST["username"];
+                                    } ?>" type="text" name="username" placeholder="Username...">
                 </div>
 
                 <div class="loginC">
@@ -103,6 +105,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <b><?php echo $error; ?></b>
             </p>
 
+            <p class="success">
+                <b><?php echo $success; ?></b>
+            </p>
         </div>
     </div>
     <div id="myModal" class="modal" <?php if ($setPassword) echo "style='display:block;'" ?>>
@@ -126,7 +131,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <input disabled type="submit" id="chpwd" value="Change">
                     </div>
                     <input type="hidden" name="setpassword" value="1">
-                    <input type="hidden" name="username" value="<?php echo $username?>">
+                    <input type="hidden" name="username" value="<?php echo $username ?>">
                 </form>
             </div>
             <div class="modal-footer">
@@ -135,33 +140,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </div>
 </body>
-<script>
-    //Modal
-    var modal = document.getElementById("myModal");
-    var span = document.getElementsByClassName("close")[0];
-    span.onclick = function() {
-        modal.style.display = "none";
-    }
-    //Verify match password
-    var password = document.getElementById("password");
-    var repassword = document.getElementById("repassword");
-    var changePwd = document.getElementById("chpwd");
-
-    password.onkeyup = function() {
-        console.log(checkPassword());
-    }
-    repassword.onkeyup = function() {
-        if (checkPassword()) {
-            changePwd.removeAttribute("disabled");
-        } else {
-            changePwd.setAttribute("disabled", "true");
-        }
-    }
-
-    function checkPassword() {
-        return (password.value == repassword.value && password.value != "")
-    }
-</script>
+<script src="../js/login.js"></script>
+<script src="../js/modal.js"></script>
 
 
 </html>

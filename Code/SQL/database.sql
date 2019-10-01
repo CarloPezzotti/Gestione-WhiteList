@@ -8,7 +8,8 @@ create TABLE type(
 );
 
 create TABLE user(
-    username varchar(255) PRIMARY KEY,
+    id int auto_increment PRIMARY KEY,
+    username varchar(255) UNIQUE,
     name varchar(50),
     surname varchar(50),
     email varchar(50),

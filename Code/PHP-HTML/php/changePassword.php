@@ -9,7 +9,7 @@
                 $conn = Database::getConnection();          
                 $stmt = $conn->prepare("UPDATE user set password=:password where username=:username");
                 $stmt->bindParam(':username', $username);
-                $stmt->bindParam(':password', $newpassword);
+                $stmt->bindParam(':password', password_hash($newpassword, PASSWORD_BCRYPT));
                 $stmt->execute(); 
                 $stmt = $conn->prepare("UPDATE user set setpassword='0' where username=:username");
                 $stmt->bindParam(':username', $username);
