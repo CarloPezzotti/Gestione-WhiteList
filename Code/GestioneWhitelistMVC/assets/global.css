@@ -1,0 +1,101 @@
+body {
+    font-family: sans-serif;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+}
+
+.error {
+    color: red;
+}
+
+.success {
+    color: rgb(0, 207, 0);
+}
+
+.container {
+    width: 100%;
+}
+
+.container.login {
+    height: 500px;
+}
+
+.container.table {
+    max-height: 200px;
+    margin: auto;
+    width: 50%;
+}
+
+.table.header {
+    background-color: black;
+    color: white;
+}
+
+.table.body {
+    border: solid 1px black;
+}
+
+.loginC {
+    margin: auto;
+    width: 500px;
+    height: 50px;
+}
+
+.loginC input {
+    float: right;
+}
+
+.loginC select {
+    float: right;
+}
+
+.loginC span {
+    float: left;
+}
+
+.tableR {
+    margin: auto;
+    width: 700px;
+    background-color: black;
+}
+
+.tableR thead th {
+    margin: auto;
+    color: white;
+}
+
+.tableR tbody td {
+    background-color: white;
+    border: 1px solid black;
+}
+
+.operation {
+    font-size: 25px;
+    color: black;
+    cursor: pointer;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover {
+    background-color: #111;
+}
