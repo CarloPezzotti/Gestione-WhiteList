@@ -1,4 +1,8 @@
 <?php
+/**
+ * Applicazione principale.
+ * Base MVC di @filippofinke.
+ */
 namespace Libs;
 
 class Database

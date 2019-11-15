@@ -18,14 +18,6 @@ class Admin
         return Users::exist($username, $password);
     }
 
-    public static function updateInfo($username, $info)
-    {
-        $query = Database::get()->prepare("select * from user where username=:username");
-        $query->bindParam(":username", $username);
-        $query->execute();
-        return $query->fetchAll(\PDO::FETCH_ASSOC)[0];
-    }
-
     public static function getTable()
     {
         $stmt = Database::get()->prepare("SELECT 
@@ -34,8 +26,8 @@ class Admin
                     name as Name,
                     surname as Surname,
                     email as Email,
-                    type as Type,
-                    password as Password
+                    setPassword as 'Password changed',
+                    type as Type
                     FROM user
                 ");
         $stmt->execute();
@@ -52,7 +44,6 @@ class Admin
 
     public static function modify($id, $values)
     {
-
         $sql = "UPDATE user set 
                 username=:username,
                 name=:name,
@@ -96,7 +87,6 @@ class Admin
             }
         }
         $stmt->execute();
-
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

@@ -1,0 +1,118 @@
+body {
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    background: rgb(248, 247, 247);
+}
+
+.error {
+    color: red;
+    float: left; 
+    text-align: left;
+}
+
+.success {
+    color: rgb(0, 207, 0);
+    float: left; 
+    text-align: left;
+}
+
+.warning {
+    color: #ffc107;
+    float: left; 
+    text-align: left;
+}
+
+.container {
+    width: 100%;
+    display: table;
+}
+
+.container.login {
+    padding:10px;
+    margin: auto;
+    background: white;
+    max-width: 0px;
+    border-radius: 10px;
+}
+
+
+.loginC {
+    margin: auto;
+    min-width: 500px;
+    min-height: 35px;
+}
+
+.loginC input {
+    float: right;
+}
+
+.loginC select {
+    float: right;
+}
+
+.loginC span {
+    float: left;
+}
+
+
+.fstTableContainer{
+    display: inline-block
+}
+
+.tableContainer{
+    overflow-y:scroll;
+    max-height:250px;
+}
+
+.tableR {
+    background-color: black;
+    border-radius: 10px;
+    width: 100%;
+}
+
+
+.tableR thead th {
+    margin: auto;
+    color: white;
+}
+
+.tableR tbody {
+    width: 100%;
+    max-height: 250px;
+}
+
+.tableR tbody td {
+    background-color: white;
+    border: 1px solid black;
+}
+
+.operation {
+    color: black;
+    cursor: pointer;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li {
+    float: left;
+}
+
+li a,li span {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover {
+    background-color: #111;
+}

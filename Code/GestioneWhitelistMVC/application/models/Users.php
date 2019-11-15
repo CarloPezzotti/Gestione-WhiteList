@@ -25,7 +25,7 @@ class Users
         $result = $query->fetchAll(\PDO::FETCH_ASSOC);
         if(count($result)==0){
             return self::USERNAME_NOT_EXIST;
-        }else if(password_verify($password,$result[0]["password"])){
+        }else if(hash('sha256',$password)==$result[0]["password"]){
             return self::LOGIN_SUCCESS;
         }else{
             return self::PASSWORD_WRONG;
@@ -44,7 +44,7 @@ class Users
             $conn = Database::get();          
             $stmt = $conn->prepare("UPDATE user set password=:password where username=:username");
             $stmt->bindParam(':username', $username);
-            $stmt->bindValue(':password',  password_hash($newpassword, PASSWORD_BCRYPT));
+            $stmt->bindValue(':password',  hash('sha256',$newpassword));
             $stmt->execute(); 
             $stmt = $conn->prepare("UPDATE user set setpassword='0' where username=:username");
             $stmt->bindParam(':username', $username);
