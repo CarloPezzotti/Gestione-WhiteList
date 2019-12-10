@@ -97,7 +97,7 @@ class AdminPanel
                 $password = Validate::usernameValidate($_POST["password"]);
             } else $error = true;
             if (!$error) {
-                $sql = "INSERT into user values(0,:username,:name,:surname,:email,:type,:password,1)";
+                $sql = "INSERT into user (ID,username,name,surname,email,type,password,setpassword) values(null,:username,:name,:surname,:email,:type,:password,1)";
                 $values = array(
                     'username'    => $username,
                     'name'  => $name,
@@ -108,6 +108,7 @@ class AdminPanel
                 );
                 try {
                     Admin::doQuery($sql, $values);
+                    ViewLoader::load("adminpanel/index");
                 } catch (\PDOException $th) {
                     ViewLoader::load("adminpanel/index");
                 }
@@ -130,7 +131,7 @@ class AdminPanel
             if (!isset($_POST["username"])) {
                 $info = Admin::getInfo($ID);
                 ViewLoader::load("adminpanel/index", array(
-                    'setID' => $info["id"],
+                    'setID' => $info["ID"],
                     'setUsername' => $info["username"],
                     'setName' => $info["name"],
                     'setSurname' => $info["surname"],

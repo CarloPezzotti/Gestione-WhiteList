@@ -15,29 +15,31 @@
     <h1>Whitelist manager login</h1>
     <div class="container">
         <div class="container login">
-            <p><b>Welcome back</b></p>
-            <form action="<?php echo URL . "home/login" ?>" method="post">
-                <div class="loginC">
-                    <span>Username:</span>
-                    <input value="" type="text" name="username" placeholder="Username...">
-                </div>
+            <div class="container login content">
+                <p><b>Welcome back</b></p>
+                <form action="<?php echo URL . "home/login" ?>" method="post">
+                    <div class="loginC">
+                        <span>Username:</span>
+                        <input value="" type="text" name="username" placeholder="Username...">
+                    </div>
 
-                <div class="loginC">
-                    <span>Password:</span>
-                    <input type="password" name="password" placeholder="Password...">
-                </div>
-                <div class="loginC">
-                    <input type="submit" value="Login">
-                </div>
-                <span class="error">
-                    <?php if (@isset($error)) if (is_bool($error)) echo "All camp required!";
-                    else echo $error ?>
-                </span>
-                <span class="success">
-                    <?php if (@isset($success)) echo $success; ?>
-                </span>
-            </form>
-            <br>
+                    <div class="loginC">
+                        <span>Password:</span>
+                        <input type="password" name="password" placeholder="Password...">
+                    </div>
+                    <div class="loginC">
+                        <input type="submit" value="Login">
+                    </div>
+                    <span class="error">
+                        <?php if (@isset($error)) if (is_bool($error)) echo "All camp required!";
+                        else echo $error ?>
+                    </span>
+                    <span class="success">
+                        <?php if (@isset($success)) echo $success; ?>
+                    </span>
+                </form>
+                <br>
+            </div>
         </div>
     </div>
     <div id="myModal" class="modal" <?php if (@isset($setpassword)) echo "style='display:block;'" ?>>

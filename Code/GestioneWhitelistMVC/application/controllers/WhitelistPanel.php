@@ -41,7 +41,7 @@ class WhitelistPanel
                 Whitelist::get();
                 ViewLoader::load('whitelist/index');
             } catch (\Exception $th) {
-                Application::redirect('errorpage/error/'.\htmlspecialchars($th->getMessage()));
+                Application::redirect('errorpage/error/' . \htmlspecialchars($th->getMessage()));
             }
         }
     }
@@ -58,7 +58,14 @@ class WhitelistPanel
                 $middlePart = \htmlspecialchars($_POST["middlePart"]);
                 $lastPart = \htmlspecialchars($_POST["lastPart"]);
                 $lastPart = ($lastPart == "*") ? "" : $lastPart;
-                $result = Whitelist::add("\r\n$lastPart.$middlePart.$fstPart");
+
+                $categorie = "Altro";
+                if (isset($_POST["categorie"])) {
+                    $categorie = $_POST["categorie"];
+                }
+
+
+                $result = Whitelist::add("\r\n$lastPart.$middlePart.$fstPart", $categorie);
                 if ($result == Whitelist::SITE_ALREADY_EXIST) {
                     ViewLoader::load('whitelist/index', array(
                         "info" => "Site already exist"
@@ -71,12 +78,9 @@ class WhitelistPanel
                     ViewLoader::load('whitelist/index', array(
                         "error" => "Domain format invalid :("
                     ));
-                }
-                else if ($result == Whitelist::SITE_ADDED) {
+                } else if ($result == Whitelist::SITE_ADDED) {
                     ViewLoader::load('whitelist/index');
-                    Whitelist::reloadProxy();
                 }
-                
             }
         }
     }
@@ -86,15 +90,14 @@ class WhitelistPanel
      * 
      * @param $site il sito da voler rimuovere.
      */
-    public function remove($site)
+    public function deleteSite($site)
     {
         if ($this->checkAuth()) {
             try {
-                Whitelist::remove(trim(base64_decode($site)));
-                Whitelist::reloadProxy();
+                Whitelist::remove(base64_decode($site));
                 ViewLoader::load('whitelist/index');
             } catch (\Exception $th) {
-                Application::redirect('errorpage/error/'.\htmlspecialchars($th->getMessage()));
+                Application::redirect('errorpage/error/' . \htmlspecialchars($th->getMessage()));
             }
         }
     }
@@ -106,5 +109,33 @@ class WhitelistPanel
     {
         Auth::logout();
         Application::redirect("home/login");
+    }
+
+    public function insertCategorie()
+    {
+        if (Auth::getAutentication() == Auth::ADMIN) {
+            if (isset($_POST["categorie"])) {
+                Whitelist::addCategorie(trim($_POST["categorie"]));
+            }
+            ViewLoader::load("whitelist/index");
+        } else {
+            ViewLoader::load("whitelist/index");
+        }
+    }
+
+    public function deleteCategoria($categoria)
+    {
+        if (Auth::getAutentication() == Auth::ADMIN) {
+            Whitelist::deleteCategoria($categoria);
+            ViewLoader::load("whitelist/index");
+        }
+    }
+
+    public function reload()
+    {
+        if ($this->checkAuth()) {
+            Whitelist::reloadProxy();
+            ViewLoader::load("whitelist/index");
+        }
     }
 }

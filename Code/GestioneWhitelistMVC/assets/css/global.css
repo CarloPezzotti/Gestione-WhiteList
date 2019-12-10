@@ -8,19 +8,19 @@ body {
 
 .error {
     color: red;
-    float: left; 
+    float: left;
     text-align: left;
 }
 
 .success {
     color: rgb(0, 207, 0);
-    float: left; 
+    float: left;
     text-align: left;
 }
 
 .warning {
     color: #ffc107;
-    float: left; 
+    float: left;
     text-align: left;
 }
 
@@ -30,13 +30,16 @@ body {
 }
 
 .container.login {
-    padding:10px;
-    margin: auto;
     background: white;
-    max-width: 0px;
-    border-radius: 10px;
+    width: 100%;
+    margin-bottom: 5px;
 }
 
+.container.login.content{
+    margin: auto;
+    max-width: 0px;
+    padding: 10px;
+}
 
 .loginC {
     margin: auto;
@@ -58,29 +61,28 @@ body {
 
 
 .fstTableContainer{
-    display: inline-block
+    display: inline-block;
+    min-width: 100px;
 }
 
 .tableContainer{
-    overflow-y:scroll;
-    max-height:250px;
+    max-height: 200px;
+    overflow: auto;
+    overflow-x: hidden;
+    margin-bottom: 5px;
 }
 
 .tableR {
-    background-color: black;
+    background-color: #333;
     border-radius: 10px;
     width: 100%;
 }
 
-
-.tableR thead th {
-    margin: auto;
-    color: white;
+.tableR thead{
+    color:white;
 }
-
-.tableR tbody {
-    width: 100%;
-    max-height: 250px;
+.tableR thead:hover{
+    background-color: #444;
 }
 
 .tableR tbody td {
@@ -91,6 +93,7 @@ body {
 .operation {
     color: black;
     cursor: pointer;
+    font-size: 18px;
 }
 
 ul {

@@ -26,91 +26,136 @@
     </nav>
     <h1>Manage Whitelist</h1>
     <div class="container">
-        <div class="container login">
-            <form action="<?php echo URL . "whitelistpanel/insert" ?>" method="post">
-                <table>
-                    <tr>
-                        <td>
-                            <span>URL:</span>
-                        </td>
-                        <td><select name="lastPart" onchange='replaceOther(this,"Last part...")'>
-                                <option>www</option>
-                                <option>web</option>
-                                <option>docs</option>
-                                <option>*</option>
-                                <option>Other</option>
-                            </select></td>
-                        <td><span>.</span></td>
-                        <td><input type="text" name="middlePart" placeholder="Domain..."></td>
-                        <td><span>.</span></td>
-                        <td><select name="fstPart" onchange='replaceOther(this,"First part...")'>
-                                <option>com</option>
-                                <option>ch</option>
-                                <option>it</option>
-                                <option>Other</option>
-                            </select></td>
-                    </tr>
-                    <tr>
-                        <td colspan="6">
-                            <input style="float: right" type="submit" value="Insert">
-                            <span class="error" style="float: left"><?php if (isset($error)) echo $error; ?></span>
-                            <span class="warning" style="float: left"><?php if (isset($info)) echo $info; ?></span>
-                        </td>
-                    </tr>
-                </table>
-
-
-            </form>
-        </div>
-        <div class="fstTableContainer">
-            <span style="float:left">Filter table: <input type="text" onkeyup="searchInTable(this.value)" placeholder="Search url..."></span><br><br>
-            <div class="tableContainer">
-                <table class='tableR' id="table">
-                    <thead>
-                        <tr>
-                            <th colspan="4">URL</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        <?php
-                        $file = Whitelist::get();
-                        for ($i = 0; $i < count($file); $i++) {
-                            echo "<tr>";
-                            /*for ($j = 0; $j < 1; $j++) {*/
-                                $cell = ((isset($file[$i]) && !empty($file[$i])) ? $file[$i] : "-");
-                                echo "<td class='operation' onClick='showModal(this)'>" . $cell . "</td>";
-                            //}
-                        }
-                        ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    <div id="myModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span class="close">&times;</span>
-                <h2>Configure web domain</h2>
-                <h3 class="domainName"></h3>
-            </div>
-            <div class="modal-body">
-                <iframe id="iframeDomain"></iframe>
-                <div>
-                    <a id="removeDomain" href="<?php echo URL . "whitelistpanel/remove/" ?>">Remove</a>
+        <?php
+        if (Auth::getAutentication() == Auth::ADMIN) {
+            ?>
+            <div class="container login">
+                <div class="container login content">
+                    <form action="<?php echo URL . "whitelistpanel/insertCategorie" ?>" method="post">
+                        <table>
+                            <tr>
+                                <td>
+                                    <span>Categorie:</span>
+                                </td>
+                                <td>
+                                    <input type="text" name="categorie" placeholder="Categorie..." id="">
+                                </td>
+                                <td>
+                                    <input type="submit" value="Insert">
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
                 </div>
             </div>
-            <div class="modal-footer">
-                <p id="domainName"></p>
+
+            <div class="fstTableContainer">
+                <div class="tableContainer">
+                    <table class="tableR">
+                        <thead>
+                            <tr>
+                                <td colspan="2">
+                                    Categorie
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                        </thead>
+                        <?php
+                            $table = Whitelist::getCategories();
+                            $show = "";
+                            for ($i = 0; $i < count($table); $i++) {
+                                echo "<tr><td>$table[$i]</td>";
+                                echo "<td><a onclick='removeCategoria(\"" . trim($table[$i]) . "\")'><span class='operation'>&times;</span></a></td></tr>";
+                            }
+                            ?>
+                    </table>
+                </div>
+            </div>
+        <?php
+        }
+        ?>
+
+        <div class="container login">
+            <div class="container login content">
+                <form action="<?php echo URL . "whitelistpanel/insert" ?>" method="post">
+                    <table>
+                        <tr>
+                            <td>
+                                <span>URL:</span>
+                            </td>
+                            <td><select name="lastPart" onchange='replaceOther(this,"Last part...")'>
+                                    <option>www</option>
+                                    <option>web</option>
+                                    <option>docs</option>
+                                    <option>*</option>
+                                    <option>Other</option>
+                                </select></td>
+                            <td><span>.</span></td>
+                            <td><input type="text" name="middlePart" placeholder="Domain..."></td>
+                            <td><span>.</span></td>
+                            <td>
+                                <select name="fstPart" onchange='replaceOther(this,"First part...")'>
+                                    <option>com</option>
+                                    <option>ch</option>
+                                    <option>it</option>
+                                    <option>Other</option>
+                                </select></td>
+                            <td>
+                                <select style="float: right" name="categorie">
+                                    <?php
+                                    $categories = Whitelist::getCategories();
+                                    for ($i = 0; $i < count($categories); $i++) {
+                                        echo "<option>" . $categories[$i] . "</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td colspan="7">
+                                <input style="float: right" type="submit" value="Insert">
+                                <button type="button" style="float:right" onclick="reload()">
+                                    <span>Reload</span>
+                                </button>
+                                <span class="error" style="float: left"><?php if (isset($error)) echo $error; ?></span>
+                                <span class="warning" style="float: left"><?php if (isset($info)) echo $info; ?></span>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
             </div>
         </div>
-    </div>
 
+        <div class="fstTableContainer">
+            <span style="float:left;display:inline-block">Filter table: <input type="text" onkeyup="searchInTable(this.value)" placeholder="Search url..."></span><br><br>
+
+            <?php
+            $table = Whitelist::get();
+            $show = "";
+            foreach ($table as $key => $value) {
+                echo "<div class='tableContainer'><table   class='tableR' id='$key'>
+                        <thead style='cursor: pointer;' onclick='showContent(this)'><tr><th>$key</th></tr></thead>
+                        <tbody class='site' style='display:$show;'>";
+                for ($i = 0; $i < count($value); $i++) {
+                    if (trim($value[$i]) != "") {
+                        echo "<tr><td>$value[$i]</td>";
+                        echo "<td><a onclick='removeSite(\"" . urlencode(trim($value[$i])) . "\")'><span class='operation'>&times;</span></a></td></tr>";
+                    }
+                }
+                echo "</tbody></table></div>";
+                $show = "none";
+            }
+            ?>
+        </div>
+    </div>
 
     <script src="/assets/js/modal.js"></script>
     <script type="text/javascript">
-        /**
+        var currentTable;
+
+        /** 
          * Funzione che va a rimpizare in un input select l'opzione other con un input di testo generico
          */
         function replaceOther(val, placeholder) {
@@ -135,7 +180,7 @@
          */
         function searchInTable(value) {
             var filter = value.toLowerCase();
-            var rows = document.querySelector("#table tbody").rows;
+            var rows = currentTable.querySelector("tbody").rows;
             for (var i = 0; i < rows.length; i++) {
                 for (var j = 0; j < rows[i].cells.length; j++) {
                     var col = rows[i].cells[j].textContent.toLowerCase();;
@@ -148,19 +193,42 @@
             }
         }
 
-        function showModal(site) {
-            site = site.innerHTML;
-            document.getElementById("myModal").style.display = "block";
-            document.getElementById("domainName").innerHTML = "Domain name: " + site;
-            var iframe = document.getElementById("iframeDomain");
-            iframe.setAttribute("src", "https://" + site);
-            iframe.style.width = "640px";
-            iframe.style.height = "480px";
-            var href = document.getElementById("removeDomain");
-            href.setAttribute("href",href.getAttribute("href")+window.btoa(site));
+        function showContent(thead) {
 
+            var tbodies = document.getElementsByClassName("site");
+            for (var i = 0; i < tbodies.length; i++) {
+                tbodies[i].style.display = "none";
+            }
+
+            var table = thead.parentElement;
+            currentTable = table;
+            if (table.tBodies[0].style.display == "none") {
+                table.tBodies[0].style.display = "";
+            } else {
+                table.tBodies[0].style.display = "none";
+            }
+        }
+
+
+        function removeCategoria(categoria) {
+            if (confirm("Are you sure?") == true) {
+                window.location.href = "/whitelistpanel/deleteCategoria/" + encodeURI(categoria);
+            }
+        }
+
+        function removeSite(site) {
+            if (confirm("Are you sure?") == true) {
+                window.location.href = "/whitelistpanel/deleteSite/" + btoa(site);
+            }
+        }
+
+        function reload() {
+            window.location.href = "/whitelistpanel/reload/";
         }
     </script>
+
+
+
 </body>
 
 </html>
