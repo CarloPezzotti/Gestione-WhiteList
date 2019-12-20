@@ -63,6 +63,14 @@ class Whitelist
 
     public static function add($site, $categorie)
     {
+        $sites = Whitelist::get();
+        foreach ($sites as $key => $value) {
+            foreach ($value as $existSite) {
+                if(trim($existSite) == trim($site)){
+                    return Whitelist::SITE_ALREADY_EXIST;
+                }
+            }
+        }
         try {
             $fp = fopen(SQUID_WHITELIST, 'a+');
             if (\filter_var($site, FILTER_VALIDATE_DOMAIN)) {
@@ -86,7 +94,7 @@ class Whitelist
             fclose($fp);
             return self::SITE_ADDED;
         } catch (\Exception $th) {
-            throw $th;
+            return Whitelist::ADDING_SITE_ERROR;
         }
     }
 
